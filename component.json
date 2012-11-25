@@ -1,0 +1,11 @@
+{
+	"name": "responsive-menu",
+	"version": "1.0.1",
+	"main": [
+		"./responsive-menu.js"
+	],
+	"dependencies": {
+		"jquery": "~1.7.2",
+		"jquery-timers": "~1.2"
+	}
+}
