@@ -68,7 +68,6 @@
 		$('li', self.$menu)
 			// open & mouse over/get focus
 			.on('mouseenter focusin', function(e) {
-				console.log('li mouseenter/focusin', e);
 				var $this = $(this);
 				if ($this.data('responsiveMenu.preventOpening')) {
 					$this.data('responsiveMenu.preventOpening', false);
@@ -76,41 +75,32 @@
 				else {
 					$this.stopTime();
 					$this.addClass('focused');
-					//console.log('StopTime for over');
 					if (!$getChildMenu($this).hasClass('animated')) {
-						console.log('OPEN by mouse');
 						$this.oneTime(self.timeoutOpen, self._open);
 					}
 				}
 			})
 			// close on mouse/focus lose
 			.on('mouseleave focusout', function(e) {
-				console.log('li mouseleave/focusout', e);
 				var $this = $(this);
 				$this.removeClass('focused');
 				//if (!$getChildMenu($this).hasClass('animated')) {
-					//console.log('stopTime for OUT');
 					$this.stopTime();
-					console.log('CLOSE by mouse');
 					$this.oneTime(self.timeoutClose, self._close);
 				//}
 			})
 			// if touched & already open, we close it
 			.on('touchend', function(e) {
-				console.log('li touchend', e);
 				var $this = $(this);
 				$this.stopTime();
 				// normal behavior apply if element not focus
 				// if already focused, if touch occurs, we toggle opening/close
 				if ($this.hasClass('focused')) {
-					//console.log('StopTime for over');
 					if ($getChildMenu($this).hasClass('open')) {
-						console.log('CLOSE by touch');
 						$this.oneTime(self.timeoutClose, self._close);
 						$this.find('li').oneTime(self.timeoutClose, self._close); // close child too
 					}
 					else {
-						console.log('OPEN by touch');
 						$this.oneTime(self.timeoutOpen, self._open);
 					}
 				}
@@ -120,22 +110,18 @@
 		$('> ul a', self.$menu)
 			// cancel click on parent sub menu link
 			.on('touchstart', function(e) {
-				console.log('a touchstart');
 				$(this).data('click-start', new Date().getTime());
 			})
 			.on('click', function(e) {
-				console.log('a click');
 				var $this = $(this);
 
 				// for touch screen, prevent click opening for short click to allow sub menu to be open
 				if ($getChildMenu($this.parent()).length && $this.data('click-start') && self.longClickStillOpenParentMenuLink) {
 					if ((new Date().getTime() - $this.data('click-start')) < self.longClickStillOpenParentMenuLink) {
-						console.log('short click');
 						e.preventDefault();
 					}
 					// if the link is supposed to work normaly, we cancel the sub menu opening
 					else {
-						console.log('long click');
 						$this.parent().data('responsiveMenu.preventOpening', true);
 					}
 				}
@@ -144,7 +130,6 @@
 
 		self._open = function() {
 			var $this = $(this);
-			//console.log('_open', $this);
 			$this.addClass('open-child');
 			self.open.apply($getChildMenu($this).addClass('open animated'));
 			if (self.timeoutOpen < self.timeoutClose) {
@@ -155,7 +140,6 @@
 		self._close = function() {
 			var $this = $(this);
 			$this.removeClass('open-child');
-			//console.log('_close');
 			// close all childs (including sub childs)
 			self.close.apply($this.find('ul.open'));
 		};
@@ -168,7 +152,6 @@
 				var $ul = $(this);
 				// if the first child is the same link as the parent element, we do not add the duplicate
 				var $parentLink = $ul.parent().find('>a');
-				console.log($ul);
 				if ($ul.children(":first > a").attr('href') != $parentLink.attr('href')) {
 					var $li = $parentLink.parent().clone().find('ul').remove().end();
 					if (self.duplicateTextAltAttr) {
